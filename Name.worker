@@ -1,0 +1,124 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <title>Wormal</title>
+    <link rel="stylesheet" href="style.css">
+</head>
+<body>
+
+    <h1>Wormal</h1>
+
+    <!-- Create Post Button -->
+    <button id="postBtn">Create Post</button>
+
+    <!-- Post Creation Box -->
+    <div id="postBox">
+        <h2>Create Post</h2>
+
+        <input type="text" id="title" placeholder="Post title">
+
+        <input type="file" id="media" accept="image/*,video/*">
+
+        <textarea id="content" placeholder="Write something..."></textarea>
+
+        <button id="submitPost">Post</button>
+    </div>
+
+    <!-- Feed -->
+    <div id="feed"></div>
+
+    <script src="script.js"></script>
+</body>
+</html>body {
+    font-family: Arial;
+    background: #111;
+    color: #eee;
+    padding: 20px;
+}
+
+#postBtn {
+    background: #4CAF50;
+    color: white;
+    padding: 12px 20px;
+    border: none;
+    border-radius: 6px;
+    cursor: pointer;
+}
+
+#postBox {
+    display: none;
+    background: #222;
+    padding: 20px;
+    margin-top: 20px;
+    border-radius: 10px;
+}
+
+input, textarea {
+    width: 100%;
+    padding: 10px;
+    margin-top: 10px;
+    border-radius: 6px;
+    border: none;
+    background: #333;
+    color: #eee;
+}
+
+#submitPost {
+    background: #2196F3;
+    color: white;
+    padding: 10px 20px;
+    border: none;
+    border-radius: 6px;
+    margin-top: 10px;
+    cursor: pointer;
+}
+
+.post {
+    background: #222;
+    padding: 15px;
+    margin-top: 20px;
+    border-radius: 10px;
+}
+
+.post img, .post video {
+    max-width: 100%;
+    margin-top: 10px;
+    border-radius: 8px;
+}// Show post creation box
+document.getElementById("postBtn").onclick = () => {
+    document.getElementById("postBox").style.display = "block";
+};
+
+// Handle post submission
+document.getElementById("submitPost").onclick = () => {
+    const title = document.getElementById("title").value;
+    const content = document.getElementById("content").value;
+    const fileInput = document.getElementById("media");
+    const file = fileInput.files[0];
+
+    const post = document.createElement("div");
+    post.className = "post";
+
+    // Add title + text
+    post.innerHTML = `<h3>${title}</h3><p>${content}</p>`;
+
+    // Add media if uploaded
+    if (file) {
+        const url = URL.createObjectURL(file);
+
+        if (file.type.startsWith("image/")) {
+            post.innerHTML += `<img src="${url}">`;
+        } else if (file.type.startsWith("video/")) {
+            post.innerHTML += `<video src="${url}" controls></video>`;
+        }
+    }
+
+    // Add post to feed
+    document.getElementById("feed").prepend(post);
+
+    // Reset fields
+    document.getElementById("title").value = "";
+    document.getElementById("content").value = "";
+    fileInput.value = "";
+    document.getElementById("postBox").style.display = "none";
+};
